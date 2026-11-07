@@ -1,0 +1,81 @@
+# Compile le launcher pour Windows et produit le ZIP à distribuer.
+#
+# - À chaque push (toutes branches) et à la demande (onglet Actions → « Run workflow ») :
+#   le ZIP est disponible dans l'onglet Actions, rubrique « Artifacts » de l'exécution.
+# - Sur un tag v* (ex. v3.0-errai1) : le ZIP est en plus attaché à une Release GitHub.
+#
+# Versions reprises de l'environnement de l'auteur (aqtinstall.log) : Qt 6.8.0, MinGW 13.1.
+name: Build Windows
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # nécessaire pour créer la Release sur un tag
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer Qt 6.8.0 et MinGW 13.1
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.8.0"
+          host: windows
+          target: desktop
+          arch: win64_mingw
+          modules: qtmultimedia
+          tools: tools_mingw1310
+          cache: true
+
+      - name: Utiliser le MinGW de Qt (et pas celui préinstallé sur la machine)
+        run: |
+          $mingw = Join-Path $env:IQTA_TOOLS "mingw1310_64\bin"
+          if (-not (Test-Path "$mingw\g++.exe")) { throw "MinGW introuvable dans $mingw" }
+          $mingw | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Configurer
+        run: cmake -S cpp -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compiler
+        run: cmake --build build --parallel 4
+
+      - name: Assembler le dossier distribuable
+        run: |
+          $out = "release\SylvaniaLauncher"
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          Copy-Item build\SylvaniaLauncher.exe $out
+          Copy-Item -Recurse build\Asset "$out\Asset"
+          windeployqt --release --compiler-runtime "$out\SylvaniaLauncher.exe"
+          Get-ChildItem $out | Format-Table Name, Length
+
+      - name: Nommer l'archive
+        id: nom
+        run: |
+          $suffixe = if ($env:GITHUB_REF_TYPE -eq "tag") { $env:GITHUB_REF_NAME } else { "$env:GITHUB_REF_NAME-$($env:GITHUB_SHA.Substring(0,7))" }
+          $suffixe = $suffixe -replace '[^A-Za-z0-9._-]', '-'
+          "zip=SylvaniaLauncher_$suffixe.zip" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Créer le ZIP
+        run: Compress-Archive -Path release\SylvaniaLauncher -DestinationPath "${{ steps.nom.outputs.zip }}"
+
+      - name: Publier dans l'onglet Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.nom.outputs.zip }}
+          path: ${{ steps.nom.outputs.zip }}
+          retention-days: 30
+
+      - name: Attacher à une Release (tags v* seulement)
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.nom.outputs.zip }}
