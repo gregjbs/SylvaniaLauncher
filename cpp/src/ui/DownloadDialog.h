@@ -41,6 +41,12 @@ public:
   void configureForEdition(const GameEdition &edition);
 
   void setDownloadUrl(const QString &url) { m_downloadUrl = url; }
+  // Taille et SHA-256 attendus (manifeste Errai) : taille connue = téléchargement
+  // par morceaux avec reprise ; empreinte connue = vérifiée avant extraction.
+  void setExpected(qint64 size, const QString &sha256) {
+    m_expectedSize = size;
+    m_expectedSha256 = sha256.toLower();
+  }
   void setWindowTitleText(const QString &title) { setWindowTitle(title); }
 
   void startDownload(const QString &directory = "");

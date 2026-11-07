@@ -449,6 +449,14 @@ void ConfigManager::setRandomBackgroundEnabled(bool enabled) {
     set("random_bg_on_launch", enabled);
 }
 
+bool ConfigManager::isErraiSslCheckIgnored() const {
+    return get("errai_ssl_ignorer", true).toBool();
+}
+
+void ConfigManager::setErraiSslCheckIgnored(bool ignored) {
+    set("errai_ssl_ignorer", ignored);
+}
+
 QByteArray ConfigManager::getWindowGeometry() const {
     return QByteArray::fromBase64(get("window_geometry", "").toString().toLatin1());
 }

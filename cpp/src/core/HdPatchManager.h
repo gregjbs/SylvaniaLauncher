@@ -52,6 +52,7 @@ private:
     QString m_wowPath;
     QString m_tempDir;
     QString m_downloadUrl;
+    QString m_expectedSha256;   // vide = non vérifié
     
     std::unique_ptr<QNetworkAccessManager> m_networkManager;
     QNetworkReply* m_reply = nullptr;

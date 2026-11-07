@@ -60,11 +60,16 @@ constexpr int kDownloadSegmentRetries = 5;     // consecutive no-progress retrie
 inline constexpr const char* kErraiRealmName = "Errai";
 inline constexpr const char* kErraiHost = "errai.minotux.com";
 inline constexpr const char* kErraiRealmlist = "set realmlist errai.minotux.com";
+// Client, patch HD et pack anglais sont servis par le portail d'Errai. client.json
+// (même dossier) donne l'adresse, la taille et le SHA-256 de chaque archive ; les
+// adresses ci-dessous ne servent que si ce manifeste est injoignable.
+inline constexpr const char* kErraiManifestUrl =
+    "https://errai.minotux.com/telechargements/client/client.json";
 
 // --- Network ------------------------------------------------------------
 inline constexpr const char* kServerHost = "sylvania-servergame.com";
 inline constexpr const char* kHdPatchUrl =
-    "https://sylvania-servergame.com/patch-hd-download.php";
+    "https://errai.minotux.com/telechargements/client/Patch-HD.zip";
 inline constexpr const char* kAddonDownloadEndpoint =
     "https://sylvania-servergame.com/download_addon.php";
 // Remote manifest describing the "recommended addons" (id, version, download
@@ -76,9 +81,9 @@ inline constexpr const char* kAddonManifestUrl =
 
 // --- WotLK 3.3.5a client -------------------------------------------------
 inline constexpr const char* kWotlkClientUrl =
-    "https://sylvania-servergame.com/launcher-download.php";
+    "https://errai.minotux.com/telechargements/client/WoW-3.3.5.zip";
 inline constexpr const char* kEnUsPackUrl =
-    "https://sylvania-servergame.com/enus-download.php";
+    "https://errai.minotux.com/telechargements/client/enUS.zip";
 // Integrity data not published by the endpoint yet: 0/empty = "unknown".
 // Filling these in makes the download size+hash enforced automatically.
 inline constexpr long long kWotlkClientExpectedSize = 0;
@@ -145,11 +150,12 @@ inline QStringList extractArchiveArgs() {
            "if (-not (Test-Path -LiteralPath $dst)) {"
            " New-Item -ItemType Directory -Force -Path $dst | Out-Null };"
            "$ok=$false;"
-           "try { Expand-Archive -LiteralPath $src -DestinationPath $dst -Force -ErrorAction Stop;"
-           " $ok=$true } catch { $ok=$false };"
-           "if (-not $ok -and (Get-Command tar.exe -ErrorAction SilentlyContinue)) {"
+           "if (Get-Command tar.exe -ErrorAction SilentlyContinue) {"
            " & tar.exe -xf $src -C $dst 2>$null;"
            " if ($LASTEXITCODE -eq 0) { $ok=$true } };"
+           "if (-not $ok) {"
+           " try { Expand-Archive -LiteralPath $src -DestinationPath $dst -Force -ErrorAction Stop;"
+           " $ok=$true } catch { $ok=$false } };"
            "if ($ok) { exit 0 } else { exit 1 }";
 }
 

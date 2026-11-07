@@ -39,6 +39,7 @@ set(SOURCES
     src/core/ReminderService.cpp
     src/core/BuildInfoPatcher.cpp
     src/ui/ButtonStyles.cpp
+    src/core/ErraiNetwork.cpp
 )
 
 # Header files
@@ -62,6 +63,7 @@ set(HEADERS
     src/core/ReminderService.h
     src/core/BuildInfoPatcher.h
     src/ui/ButtonStyles.h
+    src/core/ErraiNetwork.h
 )
 
 # Resources

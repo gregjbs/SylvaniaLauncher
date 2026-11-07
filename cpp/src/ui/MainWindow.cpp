@@ -2,6 +2,7 @@
 #include "NotesWindow.h"
 #include "RealmlistWindow.h"
 #include "DownloadDialog.h"
+#include "ErraiNetwork.h"
 #include "SettingsDialog.h"
 #include "AddonsWindow.h"
 #include "ButtonStyles.h"
@@ -111,6 +112,7 @@ MainWindow::MainWindow(QWidget* parent)
     // Restore the persisted sound preference: SoundManager starts unmuted, so
     // without this an "off" choice would silently re-enable on each launch.
     m_soundManager->setEnabled(m_config->isSoundEnabled());
+    ErraiNetwork::setIgnoreErraiSslErrors(m_config->isErraiSslCheckIgnored());
 
     setupUi();
     connectSignals();
@@ -845,8 +847,21 @@ void MainWindow::startClientInstall() {
     m_playButton->setState(WowButton::State::Downloading);
     m_statusLabel->setText(tr("Installation de %1 en cours...").arg(edition.displayName));
 
+    // Client servi par Errai : adresse, taille et SHA-256 depuis client.json.
+    // Lu AVANT de créer la fenêtre, qui démarre le téléchargement 100 ms après
+    // sa création (ensureLoaded fait tourner la boucle d'événements).
+    ErraiNetwork::Archive client;
+    if (edition.id == QLatin1String("wotlk")) {
+        ErraiManifest::instance().ensureLoaded();
+        client = ErraiManifest::instance().archive(QStringLiteral("client"), edition.clientDownloadUrl);
+    }
+
     m_downloadDialog = new DownloadDialog(this, dir);
     m_downloadDialog->configureForEdition(edition);
+    if (!client.url.isEmpty()) {
+        m_downloadDialog->setDownloadUrl(client.url);
+        m_downloadDialog->setExpected(client.size, client.sha256);
+    }
     m_downloadDialog->setLanguage(m_config->getLanguage());
 
     const auto entries = m_config->getRealmlistEntries();

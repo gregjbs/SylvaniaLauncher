@@ -69,6 +69,11 @@ public:
     bool isRandomBackgroundEnabled() const;
     void setRandomBackgroundEnabled(bool enabled);
 
+    // Fork Errai : ignorer le certificat (auto-signé) du serveur de
+    // téléchargement Errai. Activé par défaut. Voir ErraiNetwork.
+    bool isErraiSslCheckIgnored() const;
+    void setErraiSslCheckIgnored(bool ignored);
+
     // Main window geometry persistence (saveGeometry/restoreGeometry payload,
     // stored base64-encoded in config.json). Empty = use the default size.
     QByteArray getWindowGeometry() const;

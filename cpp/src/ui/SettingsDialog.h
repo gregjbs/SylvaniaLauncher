@@ -91,6 +91,7 @@ private:
 
   QLineEdit *m_pathEdit = nullptr;
   QCheckBox *m_soundCheckbox = nullptr;
+  QCheckBox *m_erraiSslCheckbox = nullptr;
   QPushButton *m_browseButton = nullptr;
   QComboBox *m_backgroundCombo = nullptr;
   QPushButton *m_randomBgButton = nullptr;

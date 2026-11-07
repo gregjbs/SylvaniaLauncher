@@ -1,3 +1,4 @@
+#include "ErraiNetwork.h"
 #include "SettingsDialog.h"
 #include "ConfigManager.h"
 #include "GameEdition.h"
@@ -294,6 +295,14 @@ void SettingsDialog::setupUi() {
     )");
     mainLayout->addWidget(m_soundCheckbox);
 
+    // Fork Errai : le portail présente un certificat auto-signé.
+    m_erraiSslCheckbox = new QCheckBox(tr("Ignorer le certificat du serveur Errai (auto-signé)"), this);
+    m_erraiSslCheckbox->setToolTip(tr(
+        "Ne vérifie pas le certificat HTTPS de errai.minotux.com pour les téléchargements "
+        "(client, patch HD, pack anglais). Les autres serveurs restent vérifiés."));
+    m_erraiSslCheckbox->setStyleSheet(m_soundCheckbox->styleSheet());
+    mainLayout->addWidget(m_erraiSslCheckbox);
+
     // Patch Management Section: only for editions that support the HD patch
     // (WotLK 3.3.5). Legion 7.3.5 already embeds those assets natively, so the
     // whole section — master ON/OFF + per-feature toggles — is hidden there.
@@ -527,6 +536,7 @@ void SettingsDialog::onMasterToggled(bool enabled) {
 void SettingsDialog::loadSettings() {
     m_pathEdit->setText(m_config->getWowPath());
     m_soundCheckbox->setChecked(!m_soundManager->isMuted());
+    m_erraiSslCheckbox->setChecked(m_config->isErraiSslCheckIgnored());
 
     int bgIndex = m_backgroundCombo->findData(m_config->getBackground());
     if (bgIndex != -1) {
@@ -597,6 +607,8 @@ void SettingsDialog::saveSettings() {
     m_config->setSoundEnabled(soundOn);
     m_config->setBackground(m_backgroundCombo->currentData().toString());
     m_config->setRandomBackgroundEnabled(m_randomBgButton->isChecked());
+    m_config->setErraiSslCheckIgnored(m_erraiSslCheckbox->isChecked());
+    ErraiNetwork::setIgnoreErraiSslErrors(m_erraiSslCheckbox->isChecked());
 
     // Apply each feature's toggle to its real file set (root + all locales).
     for (const auto& feature : m_features) {
@@ -779,8 +791,13 @@ void SettingsDialog::onDownloadEnUsClicked() {
         return;
     }
 
+    // Manifeste lu avant de créer la fenêtre (elle démarre seule après 100 ms).
+    ErraiManifest::instance().ensureLoaded();
+    const ErraiNetwork::Archive enus = ErraiManifest::instance().archive(
+        QStringLiteral("enus"), QString::fromUtf8(SylvaniaConstants::kEnUsPackUrl));
     DownloadDialog* dlDialog = new DownloadDialog(this, wowPath + "/Data");
-    dlDialog->setDownloadUrl(QString::fromUtf8(SylvaniaConstants::kEnUsPackUrl));
+    dlDialog->setDownloadUrl(enus.url);
+    dlDialog->setExpected(enus.size, enus.sha256);
     dlDialog->setSkipConfigWtf(true);
     dlDialog->setWindowTitleText(tr("Téléchargement du Pack Anglais"));
 

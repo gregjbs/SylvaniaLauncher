@@ -11,6 +11,7 @@
 #include <QTimer>
 #include <QFileInfo>
 #include <QProcess>
+#include "ErraiNetwork.h"
 #include <QProcessEnvironment>
 #include <QCoreApplication>
 #include <QSaveFile>
@@ -253,6 +254,7 @@ void DownloadDialog::startSingleStream() {
                          QNetworkRequest::SameOriginRedirectPolicy);
 
     m_reply = m_networkManager->get(request);
+    ErraiNetwork::watch(m_reply);
 
     connect(m_reply, &QNetworkReply::downloadProgress,
             this, &DownloadDialog::onDownloadProgress);
@@ -379,6 +381,7 @@ void DownloadDialog::requestNextSegment() {
         QStringLiteral("bytes=%1-%2").arg(start).arg(end).toUtf8());
 
     m_reply = m_networkManager->get(request);
+    ErraiNetwork::watch(m_reply);
 
     // Buffer the segment in memory; it is committed to disk only after passing
     // its chunk hash. The UI tracks committed + in-flight bytes.

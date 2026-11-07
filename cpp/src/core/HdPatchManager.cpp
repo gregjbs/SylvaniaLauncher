@@ -1,5 +1,6 @@
 #include "HdPatchManager.h"
 #include "Constants.h"
+#include "ErraiNetwork.h"
 
 #include <QDir>
 #include <QDirIterator>
@@ -37,6 +38,13 @@ HdPatchManager::~HdPatchManager() {
 void HdPatchManager::startInstallation() {
     if (m_installing) return;
     m_installing = true;
+
+    // Adresse et empreinte du patch HD publiées par le portail d'Errai.
+    ErraiManifest::instance().ensureLoaded();
+    const ErraiNetwork::Archive hd = ErraiManifest::instance().archive(
+        QStringLiteral("hd"), QString::fromUtf8(SylvaniaConstants::kHdPatchUrl));
+    m_downloadUrl = hd.url;
+    m_expectedSha256 = hd.sha256;
     
     QDir dir(m_tempDir);
     if (!dir.exists()) {
@@ -68,6 +76,7 @@ void HdPatchManager::startInstallation() {
                          QNetworkRequest::SameOriginRedirectPolicy);
 
     m_reply = m_networkManager->get(request);
+    ErraiNetwork::watch(m_reply);
     
     connect(m_reply, &QNetworkReply::downloadProgress,
             this, &HdPatchManager::onDownloadProgress);
@@ -128,6 +137,14 @@ void HdPatchManager::verifyHash(const QString& filePath) {
         watcher->deleteLater();
         
         qDebug() << "HD Patch downloaded file SHA-256:" << hash.toHex();
+
+        if (!m_expectedSha256.isEmpty() && QString::fromLatin1(hash.toHex()) != m_expectedSha256) {
+            QFile::remove(filePath);
+            m_installing = false;
+            emit finished(false, tr("Le patch HD téléchargé est corrompu (empreinte SHA-256 différente). "
+                                    "Relancez l'installation."));
+            return;
+        }
         
         emit progressChanged(100, tr("Vérification terminée. Extraction..."));
         
