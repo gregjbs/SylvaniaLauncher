@@ -31,6 +31,7 @@ struct Archive {
     QString url;
     qint64 size = 0;      // 0 = inconnue
     QString sha256;       // vide = inconnue (minuscules)
+    qint64 extracted = 0; // taille une fois décompressé, 0 = inconnue
 };
 
 }  // namespace ErraiNetwork

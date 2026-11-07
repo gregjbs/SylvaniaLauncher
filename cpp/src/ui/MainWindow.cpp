@@ -861,6 +861,7 @@ void MainWindow::startClientInstall() {
     if (!client.url.isEmpty()) {
         m_downloadDialog->setDownloadUrl(client.url);
         m_downloadDialog->setExpected(client.size, client.sha256);
+        m_downloadDialog->setExpectedExtractedSize(client.extracted);
     }
     m_downloadDialog->setLanguage(m_config->getLanguage());
 

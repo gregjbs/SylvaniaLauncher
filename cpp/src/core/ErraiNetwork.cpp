@@ -82,6 +82,7 @@ ErraiNetwork::Archive ErraiManifest::archive(const QString& key, const QString& 
         a.url = QUrl(QString::fromUtf8(SylvaniaConstants::kErraiManifestUrl)).resolved(QUrl(url)).toString();
         a.size = static_cast<qint64>(o.value("taille").toDouble(0));
         a.sha256 = o.value("sha256").toString().toLower();
+        a.extracted = static_cast<qint64>(o.value("taille_decompressee").toDouble(0));
     }
     return a;
 }

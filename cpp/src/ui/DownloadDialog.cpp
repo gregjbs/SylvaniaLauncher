@@ -12,6 +12,7 @@
 #include <QFileInfo>
 #include <QProcess>
 #include "ErraiNetwork.h"
+#include "InstallProgress.h"
 #include <QProcessEnvironment>
 #include <QCoreApplication>
 #include <QSaveFile>
@@ -30,7 +31,7 @@ DownloadDialog::DownloadDialog(QWidget* parent, const QString& destination)
     , m_downloadUrl(QString::fromUtf8(SylvaniaConstants::kWotlkClientUrl))
 {
     setWindowTitle(tr("Téléchargement du Client WoW"));
-    setFixedSize(500, 250);
+    setFixedSize(620, 290);
     setModal(true);
 
     setupUi();
@@ -76,6 +77,14 @@ void DownloadDialog::setupUi() {
     mainLayout->setSpacing(SylvaniaConstants::kSpaceMd);
     mainLayout->setContentsMargins(SylvaniaConstants::kSpaceLg, SylvaniaConstants::kSpaceLg,
                                    SylvaniaConstants::kSpaceLg, SylvaniaConstants::kSpaceLg);
+
+    // Les quatre étapes de l'installation
+    m_stepsLabel = new QLabel(this);
+    m_stepsLabel->setTextFormat(Qt::RichText);
+    m_stepsLabel->setAlignment(Qt::AlignCenter);
+    m_stepsLabel->setStyleSheet("font-size: 12px;");
+    m_stepsLabel->setText(InstallProgress::liste(InstallProgress::Telechargement));
+    mainLayout->addWidget(m_stepsLabel);
 
     // Status
     m_statusLabel = new QLabel(tr("Préparation du téléchargement..."), this);
@@ -155,6 +164,10 @@ void DownloadDialog::setupUi() {
 
     // Dialog style
     setStyleSheet("QDialog { background-color: #1a1a2e; }");
+}
+
+void DownloadDialog::setEtape(int etape) {
+    m_stepsLabel->setText(InstallProgress::liste(etape));
 }
 
 bool DownloadDialog::checkDiskSpace(qint64 requiredBytes) {
@@ -247,6 +260,7 @@ void DownloadDialog::startSingleStream() {
         return;
     }
 
+    setEtape(InstallProgress::Telechargement);
     m_statusLabel->setText(tr("Connexion au serveur..."));
 
     QNetworkRequest request{QUrl(m_downloadUrl)};
@@ -354,6 +368,7 @@ void DownloadDialog::startSegmentedDownload() {
     // spike of "all bytes already on disk".
     m_lastReceivedBytes = m_downloadOffset;
     m_speedTimer.restart();
+    setEtape(InstallProgress::Telechargement);
     m_statusLabel->setText(tr("Connexion au serveur..."));
     requestNextSegment();
 }
@@ -501,7 +516,7 @@ void DownloadDialog::updateDownloadUi() {
     m_progressBar->setRange(0, 100);
     m_progressBar->setValue(progress);
     emit progressChanged(progress);
-    m_statusLabel->setText(tr("Téléchargement en cours... %1%").arg(progress));
+    m_statusLabel->setText(tr("%1 — %2%").arg(InstallProgress::titre(InstallProgress::Telechargement)).arg(progress));
     m_sizeLabel->setText(tr("Taille: %1 / %2")
         .arg(formatBytes(live), formatBytes(m_expectedSize)));
     updateSpeed(live);
@@ -527,7 +542,7 @@ void DownloadDialog::onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal)
         m_progressBar->setValue(progress);
         emit progressChanged(progress);
 
-        m_statusLabel->setText(tr("Téléchargement en cours... %1%").arg(progress));
+        m_statusLabel->setText(tr("%1 — %2%").arg(InstallProgress::titre(InstallProgress::Telechargement)).arg(progress));
         m_sizeLabel->setText(tr("Taille: %1 / %2")
             .arg(formatBytes(bytesReceived))
             .arg(formatBytes(bytesTotal)));
@@ -567,22 +582,17 @@ void DownloadDialog::onDownloadFinished() {
         m_file->close();
     }
 
-    m_statusLabel->setText(tr("Vérification de l'intégrité du fichier..."));
-    m_progressBar->setMaximum(0); // Indeterminate mode
-    m_progressBar->setMinimum(0);
-    emit progressChanged(-1);
-
-    // Force UI update
-    QCoreApplication::processEvents();
-
+    showVerifyingState();
     verifyIntegrity(archivePath());
 }
 
 void DownloadDialog::showVerifyingState() {
-    m_progressBar->setRange(0, 0);   // indeterminate marquee
-    emit progressChanged(-1);
-    m_statusLabel->setText(tr("Vérification de l'intégrité (SHA-256)…"));
-    m_speedLabel->setText(tr("Cela peut prendre quelques minutes pour un gros client."));
+    setEtape(InstallProgress::Verification);
+    m_progressBar->setRange(0, 100);
+    m_progressBar->setValue(0);
+    emit progressChanged(0);
+    m_statusLabel->setText(tr("%1 (SHA-256)…").arg(InstallProgress::titre(InstallProgress::Verification)));
+    m_speedLabel->setText(tr("On s'assure que l'archive est intacte avant de l'ouvrir."));
     m_sizeLabel->setText("");
     m_etaLabel->setText("");
     QCoreApplication::processEvents();   // repaint before the long hash starts
@@ -656,19 +666,25 @@ void DownloadDialog::verifyIntegrity(const QString& filePath) {
         });
     });
 
-    // Compute SHA-256 hash off the UI thread.
-    QFuture<QByteArray> future = QtConcurrent::run([filePath]() {
-        QFile f(filePath);
-        if (f.open(QFile::ReadOnly)) {
-            QCryptographicHash hash(QCryptographicHash::Sha256);
-            if (hash.addData(&f)) {
-                return hash.result();
-            }
-        }
-        return QByteArray();
+    // SHA-256 hors du fil de l'interface, avec un pourcentage réel.
+    setEtape(InstallProgress::Verification);
+    const InstallProgress::Empreinte empreinte = InstallProgress::calculerSha256(filePath);
+    QTimer* suivi = new QTimer(watcher);
+    suivi->setInterval(300);
+    connect(suivi, &QTimer::timeout, this, [this, empreinte]() {
+        if (empreinte.total <= 0) return;
+        const qint64 lus = empreinte.lus->load();
+        const int pct = static_cast<int>(lus * 100 / empreinte.total);
+        m_progressBar->setRange(0, 100);
+        m_progressBar->setValue(pct);
+        emit progressChanged(pct);
+        m_statusLabel->setText(tr("%1 (SHA-256) — %2%")
+            .arg(InstallProgress::titre(InstallProgress::Verification)).arg(pct));
+        m_sizeLabel->setText(tr("%1 / %2").arg(formatBytes(lus), formatBytes(empreinte.total)));
     });
+    suivi->start();
 
-    watcher->setFuture(future);
+    watcher->setFuture(empreinte.resultat);
 }
 
 void DownloadDialog::extractArchive(const QString& archivePath) {
@@ -704,12 +720,32 @@ void DownloadDialog::runExtractionProcess(const QString& archivePath, const QStr
     // instead of recursively scanning the destination on the UI thread every
     // few seconds: that scan froze the UI on large clients, and could walk an
     // entire drive when installing to a drive root (e.g. D:\).
-    m_progressBar->setRange(0, 0); // indeterminate (marquee)
-    m_statusLabel->setText(tr("Extraction des fichiers en cours..."));
-    m_speedLabel->setText(tr("Veuillez patienter..."));
+    // Fork Errai : avancement mesuré sur les seuls dossiers créés par la
+    // décompression (jamais tout le dossier de destination), en arrière-plan.
+    setEtape(InstallProgress::Decompression);
+    const qint64 attendu = m_expectedExtracted > 0 ? m_expectedExtracted
+                                                   : QFileInfo(archivePath).size();
+    const bool estime = m_expectedExtracted <= 0;
+    m_progressBar->setRange(0, 100);
+    m_progressBar->setValue(0);
+    m_statusLabel->setText(tr("%1…").arg(InstallProgress::titre(InstallProgress::Decompression)));
+    m_speedLabel->setText(tr("Les fichiers du jeu sont extraits de l'archive."));
     m_sizeLabel->setText("");
     m_etaLabel->setText("");
-    emit progressChanged(-1);
+    emit progressChanged(0);
+
+    auto* suivi = new SuiviDecompression(m_destination, QFileInfo(archivePath).fileName(), attendu, process);
+    connect(suivi, &SuiviDecompression::avancement, this, [this, estime](qint64 octets, qint64 total) {
+        if (total <= 0) return;
+        const int pct = static_cast<int>(qMin<qint64>(99, octets * 100 / total));
+        m_progressBar->setValue(pct);
+        emit progressChanged(pct);
+        m_statusLabel->setText(tr("%1 — %2%")
+            .arg(InstallProgress::titre(InstallProgress::Decompression)).arg(pct));
+        m_sizeLabel->setText(tr("%1 / %2%3").arg(formatBytes(octets), estime ? tr("≈ ") : QString(),
+                                                 formatBytes(total)));
+    });
+    suivi->demarrer();
 
     connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this, [this, process, archivePath](int exitCode, QProcess::ExitStatus exitStatus) {
@@ -741,10 +777,15 @@ void DownloadDialog::runExtractionProcess(const QString& archivePath, const QStr
 }
 
 void DownloadDialog::onExtractionSucceeded(const QString& archivePath) {
+    setEtape(InstallProgress::Installation);
     m_progressBar->setRange(0, 100);
     m_progressBar->setValue(100);
-    m_statusLabel->setText(tr("Extraction terminée!"));
+    m_statusLabel->setText(tr("%1 — configuration du client…")
+        .arg(InstallProgress::titre(InstallProgress::Installation)));
+    m_speedLabel->setText(tr("Suppression de l'archive temporaire, réglages du jeu."));
+    m_sizeLabel->setText("");
     emit progressChanged(100);
+    QCoreApplication::processEvents();
 
     // Remove temp archive
     QFile::remove(archivePath);
@@ -754,7 +795,9 @@ void DownloadDialog::onExtractionSucceeded(const QString& archivePath) {
         generateConfigWtf();
     }
 
-    emit downloadFinished(true, tr("Téléchargement et extraction terminés!"));
+    setEtape(InstallProgress::kNombreEtapes);   // tout coché
+    emit downloadFinished(true, tr("Installation terminée : téléchargement, vérification, "
+                                   "décompression et installation réussis."));
     accept();
 }
 

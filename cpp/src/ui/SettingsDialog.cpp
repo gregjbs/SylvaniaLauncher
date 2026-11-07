@@ -798,6 +798,7 @@ void SettingsDialog::onDownloadEnUsClicked() {
     DownloadDialog* dlDialog = new DownloadDialog(this, wowPath + "/Data");
     dlDialog->setDownloadUrl(enus.url);
     dlDialog->setExpected(enus.size, enus.sha256);
+    dlDialog->setExpectedExtractedSize(enus.extracted);
     dlDialog->setSkipConfigWtf(true);
     dlDialog->setWindowTitleText(tr("Téléchargement du Pack Anglais"));
 

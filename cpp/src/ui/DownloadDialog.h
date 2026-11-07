@@ -47,6 +47,9 @@ public:
     m_expectedSize = size;
     m_expectedSha256 = sha256.toLower();
   }
+  // Taille une fois décompressé (manifeste Errai) : pourcentage exact de la
+  // décompression. Inconnue : estimée d'après la taille de l'archive.
+  void setExpectedExtractedSize(qint64 size) { m_expectedExtracted = size; }
   void setWindowTitleText(const QString &title) { setWindowTitle(title); }
 
   void startDownload(const QString &directory = "");
@@ -132,6 +135,8 @@ private:
   QString m_editionId = "wotlk";
   QString m_archiveFormat = "zip";       // "zip" | "tar.gz"
   qint64 m_expectedSize = 0;             // 0 = unknown
+  qint64 m_expectedExtracted = 0;        // 0 = unknown
+  void setEtape(int etape);
   QString m_expectedSha256;              // empty = unknown
   bool m_requireHash = false;            // true -> refuse extraction w/o hash
   QStringList m_exeCandidates{QStringLiteral("Wow.exe")};
@@ -158,6 +163,7 @@ private:
   QStringList m_chunkHashes;       // lowercase hex SHA-256, one per chunk, in order
 
   // UI Elements
+  QLabel *m_stepsLabel = nullptr;   // les quatre étapes (fork Errai)
   QLabel *m_statusLabel = nullptr;
   QLabel *m_speedLabel = nullptr;
   QLabel *m_sizeLabel = nullptr;

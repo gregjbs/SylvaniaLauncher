@@ -1,6 +1,7 @@
 #include "HdPatchManager.h"
 #include "Constants.h"
 #include "ErraiNetwork.h"
+#include "InstallProgress.h"
 
 #include <QDir>
 #include <QDirIterator>
@@ -45,6 +46,7 @@ void HdPatchManager::startInstallation() {
         QStringLiteral("hd"), QString::fromUtf8(SylvaniaConstants::kHdPatchUrl));
     m_downloadUrl = hd.url;
     m_expectedSha256 = hd.sha256;
+    m_expectedExtracted = hd.extracted;
     
     QDir dir(m_tempDir);
     if (!dir.exists()) {
@@ -91,13 +93,15 @@ void HdPatchManager::startInstallation() {
         }
     });
     
-    emit progressChanged(0, tr("Démarrage du téléchargement..."));
+    emit progressChanged(0, tr("%1 du patch HD…").arg(InstallProgress::titre(InstallProgress::Telechargement)));
 }
 
 void HdPatchManager::onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
     if (bytesTotal > 0) {
         int progress = static_cast<int>((bytesReceived * 100) / bytesTotal);
-        emit progressChanged(progress, tr("Téléchargement du Patch HD... %1%").arg(progress));
+        emit progressChanged(progress, tr("%1 du patch HD — %2% (%3 / %4)")
+            .arg(InstallProgress::titre(InstallProgress::Telechargement)).arg(progress)
+            .arg(octets(bytesReceived), octets(bytesTotal)));
     }
 }
 
@@ -122,7 +126,7 @@ void HdPatchManager::onDownloadFinished() {
         return;
     }
 
-    emit progressChanged(100, tr("Téléchargement terminé. Vérification..."));
+    emit progressChanged(0, tr("%1 (SHA-256)…").arg(InstallProgress::titre(InstallProgress::Verification)));
 
     QString zipPath = m_tempDir + "/patch-hd.zip";
 
@@ -146,7 +150,7 @@ void HdPatchManager::verifyHash(const QString& filePath) {
             return;
         }
         
-        emit progressChanged(100, tr("Vérification terminée. Extraction..."));
+        emit progressChanged(0, tr("%1…").arg(InstallProgress::titre(InstallProgress::Decompression)));
         
         // Slight delay to ensure file handle is released before PowerShell extracts
         QTimer::singleShot(SylvaniaConstants::kHashVerifyDelayMs, this, [this, filePath]() {
@@ -154,18 +158,19 @@ void HdPatchManager::verifyHash(const QString& filePath) {
         });
     });
     
-    QFuture<QByteArray> future = QtConcurrent::run([filePath]() {
-        QFile f(filePath);
-        if (f.open(QFile::ReadOnly)) {
-            QCryptographicHash hash(QCryptographicHash::Sha256);
-            if (hash.addData(&f)) {
-                return hash.result();
-            }
-        }
-        return QByteArray();
+    const InstallProgress::Empreinte empreinte = InstallProgress::calculerSha256(filePath);
+    QTimer* suivi = new QTimer(watcher);
+    suivi->setInterval(500);
+    connect(suivi, &QTimer::timeout, this, [this, empreinte]() {
+        if (empreinte.total <= 0) return;
+        const qint64 lus = empreinte.lus->load();
+        const int pct = static_cast<int>(lus * 100 / empreinte.total);
+        emit progressChanged(pct, tr("%1 (SHA-256) — %2% (%3 / %4)")
+            .arg(InstallProgress::titre(InstallProgress::Verification)).arg(pct)
+            .arg(octets(lus), octets(empreinte.total)));
     });
-    
-    watcher->setFuture(future);
+    suivi->start();
+    watcher->setFuture(empreinte.resultat);
 }
 
 void HdPatchManager::extractPatch(const QString& zipPath) {
@@ -184,7 +189,19 @@ void HdPatchManager::extractPatch(const QString& zipPath) {
     // The extraction runs in a child process. Show a busy/indeterminate state
     // (progress = -1) instead of recursively scanning the growing extraction
     // tree on the UI thread, which froze the launcher on large clients.
-    emit progressChanged(-1, tr("Extraction des fichiers HD en cours..."));
+    emit progressChanged(0, tr("%1…").arg(InstallProgress::titre(InstallProgress::Decompression)));
+
+    // Avancement : taille de ce qui apparaît dans le dossier d'extraction (vide au départ).
+    const qint64 attendu = m_expectedExtracted > 0 ? m_expectedExtracted : QFileInfo(zipPath).size();
+    auto* suiviDecomp = new SuiviDecompression(extractPath, QString(), attendu, process);
+    connect(suiviDecomp, &SuiviDecompression::avancement, this, [this](qint64 lus, qint64 total) {
+        if (total <= 0) return;
+        const int pct = static_cast<int>(qMin<qint64>(99, lus * 100 / total));
+        emit progressChanged(pct, tr("%1 — %2% (%3 / %4)")
+            .arg(InstallProgress::titre(InstallProgress::Decompression)).arg(pct)
+            .arg(octets(lus), octets(total)));
+    });
+    suiviDecomp->demarrer();
 
     process->start("powershell", SylvaniaConstants::extractArchiveArgs());
 
@@ -193,7 +210,7 @@ void HdPatchManager::extractPatch(const QString& zipPath) {
         process->deleteLater();
 
         if (exitStatus == QProcess::NormalExit && exitCode == 0) {
-            emit progressChanged(100, tr("Extraction terminée. Migration des fichiers..."));
+            emit progressChanged(0, tr("%1…").arg(InstallProgress::titre(InstallProgress::Installation)));
 
             // Locate the client root inside the extracted tree. The archive may
             // wrap "Le Client WoW HD" in extra folders (e.g. "Patch-HD/...") or
@@ -298,7 +315,8 @@ void HdPatchManager::migrateFiles(const QString& sourcePath) {
         
         current++;
         QCoreApplication::processEvents(); // Prevent freeze during migration
-        emit progressChanged(static_cast<int>((current * 100) / total), tr("Migration: ") + item);
+        emit progressChanged(static_cast<int>((current * 100) / total),
+            tr("%1 — %2").arg(InstallProgress::titre(InstallProgress::Installation), item));
     }
     
     generateConfigWtf();
@@ -425,6 +443,12 @@ bool HdPatchManager::isInstalled(const QString& wowPath) {
     }
 
     return false;
+}
+
+QString HdPatchManager::octets(qint64 n) {
+    const double go = n / 1e9;
+    return go >= 1 ? QString::number(go, 'f', 1).replace('.', ',') + " Go"
+                   : QString::number(n / 1e6, 'f', 0) + " Mo";
 }
 
 QString HdPatchManager::formatBytes(qint64 bytes) const {

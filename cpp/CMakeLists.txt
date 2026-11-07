@@ -40,6 +40,7 @@ set(SOURCES
     src/core/BuildInfoPatcher.cpp
     src/ui/ButtonStyles.cpp
     src/core/ErraiNetwork.cpp
+    src/core/InstallProgress.cpp
 )
 
 # Header files
@@ -64,6 +65,7 @@ set(HEADERS
     src/core/BuildInfoPatcher.h
     src/ui/ButtonStyles.h
     src/core/ErraiNetwork.h
+    src/core/InstallProgress.h
 )
 
 # Resources

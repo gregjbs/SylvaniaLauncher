@@ -53,6 +53,8 @@ private:
     QString m_tempDir;
     QString m_downloadUrl;
     QString m_expectedSha256;   // vide = non vérifié
+    qint64 m_expectedExtracted = 0;
+    static QString octets(qint64 n);
     
     std::unique_ptr<QNetworkAccessManager> m_networkManager;
     QNetworkReply* m_reply = nullptr;
