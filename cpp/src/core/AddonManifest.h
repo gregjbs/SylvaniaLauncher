@@ -18,6 +18,7 @@ struct ManifestAddon {
     QString description;
     QString url;            // download URL (may be a ?file=... PHP endpoint)
     QStringList folders;    // folders expected under Interface/AddOns
+    QString sha256;         // fork Errai : empreinte de l'archive (vide = non vérifiée)
 };
 
 /**
@@ -44,10 +45,13 @@ public:
     void fetch();
 
     const std::vector<ManifestAddon>& addons() const { return m_addons; }
+    // Fork Errai : liste « catalogue » du même manifeste (vide si absente).
+    const std::vector<ManifestAddon>& catalogue() const { return m_catalogue; }
 
     // Parse a manifest JSON document. ok (if provided) reports whether the
     // document was well-formed and contained at least one valid addon.
-    static std::vector<ManifestAddon> parse(const QByteArray& json, bool* ok = nullptr);
+    static std::vector<ManifestAddon> parse(const QByteArray& json, bool* ok = nullptr,
+                                            const QString& key = QStringLiteral("addons"));
     // The manifest bundled in resources, used as offline fallback.
     std::vector<ManifestAddon> embedded() const;
 
@@ -61,4 +65,5 @@ private:
     std::unique_ptr<QNetworkAccessManager> m_network;
     QNetworkReply* m_reply = nullptr;
     std::vector<ManifestAddon> m_addons;
+    std::vector<ManifestAddon> m_catalogue;
 };

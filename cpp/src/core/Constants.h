@@ -70,14 +70,15 @@ inline constexpr const char* kErraiManifestUrl =
 inline constexpr const char* kServerHost = "sylvania-servergame.com";
 inline constexpr const char* kHdPatchUrl =
     "https://errai.minotux.com/telechargements/client/Patch-HD.zip";
+// Fork Errai : archives d'add-ons servies par le portail (adresse = base + fichier).
 inline constexpr const char* kAddonDownloadEndpoint =
-    "https://sylvania-servergame.com/download_addon.php";
+    "https://errai.minotux.com/telechargements/addons/";
 // Remote manifest describing the "recommended addons" (id, version, download
 // URL, expected folders). Editing it server-side adds an addon without a client
 // rebuild; if it cannot be fetched the launcher falls back to the copy embedded
 // in resources (:/addons/manifest).
 inline constexpr const char* kAddonManifestUrl =
-    "https://sylvania-servergame.com/launcher/addons.json";
+    "https://errai.minotux.com/telechargements/addons/addons.json";
 
 // --- WotLK 3.3.5a client -------------------------------------------------
 inline constexpr const char* kWotlkClientUrl =

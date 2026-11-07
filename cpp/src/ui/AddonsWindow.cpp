@@ -3,6 +3,8 @@
 #include "AddonManifest.h"
 #include "GameEdition.h"
 #include "Constants.h"
+#include "ErraiNetwork.h"
+#include <QCryptographicHash>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -257,20 +259,40 @@ QWidget* AddonsWindow::buildCatalogTab() {
     m_catalogLayout = new QVBoxLayout(content);
     m_catalogLayout->setSpacing(10);
 
+    populateCatalogCards();
+
+    m_catalogLayout->addStretch();
+    scroll->setWidget(content);
+    outer->addWidget(scroll, 1);
+    return page;
+}
+
+void AddonsWindow::populateCatalogCards() {
+    if (!m_catalogLayout) return;
+
+    // Retire les cartes existantes du catalogue (reconstruction après lecture du manifeste).
+    for (auto it = m_cards.begin(); it != m_cards.end();) {
+        if ((*it)->target.source == QLatin1String("catalog")) { delete *it; it = m_cards.erase(it); }
+        else ++it;
+    }
+    while (QLayoutItem* item = m_catalogLayout->takeAt(0)) {
+        if (item->widget()) item->widget()->deleteLater();
+        delete item;
+    }
+
     for (const AddonInfo& addon : m_catalog) {
         InstallTarget target;
-        target.id = addon.folderName;
+        target.id = addon.id.isEmpty() ? addon.folderName : addon.id;
         target.name = addon.name;
         target.version = QString();
-        QUrl url(QString::fromUtf8(SylvaniaConstants::kAddonDownloadEndpoint));
-        QUrlQuery query;
-        query.addQueryItem("file", addon.downloadFileName);
-        url.setQuery(query);
-        target.url = url.toString();
-        target.folders = QStringList{addon.folderName};
+        target.url = !addon.url.isEmpty()
+            ? addon.url
+            : QString::fromUtf8(SylvaniaConstants::kAddonDownloadEndpoint) + addon.downloadFileName;
+        target.folders = addon.folders.isEmpty() ? QStringList{addon.folderName} : addon.folders;
         target.source = "catalog";
+        target.sha256 = addon.sha256;
 
-        QFrame* frame = makeCardFrame(content);
+        QFrame* frame = makeCardFrame(m_catalogLayout->parentWidget());
         QHBoxLayout* row = new QHBoxLayout(frame);
         row->setContentsMargins(15, 12, 15, 12);
 
@@ -317,9 +339,6 @@ QWidget* AddonsWindow::buildCatalogTab() {
     }
 
     m_catalogLayout->addStretch();
-    scroll->setWidget(content);
-    outer->addWidget(scroll, 1);
-    return page;
 }
 
 QWidget* AddonsWindow::buildInstalledTab() {
@@ -409,6 +428,21 @@ QWidget* AddonsWindow::buildInstalledTab() {
 // ---------------------------------------------------------------------------
 void AddonsWindow::onManifestLoaded(bool fromRemote) {
     populateRecommendedCards();
+    if (!m_manifest->catalogue().empty() && !m_activeCard) {
+        m_catalog.clear();
+        for (const ManifestAddon& a : m_manifest->catalogue()) {
+            AddonInfo info;
+            info.name = a.name;
+            info.description = a.description;
+            info.folderName = a.folders.value(0);
+            info.url = a.url;
+            info.folders = a.folders;
+            info.sha256 = a.sha256;
+            info.id = a.id;
+            m_catalog.push_back(info);
+        }
+        populateCatalogCards();
+    }
     if (m_recommendedStatus) {
         if (m_manifest->addons().empty()) {
             m_recommendedStatus->setText(tr("Aucun addon recommandé disponible."));
@@ -433,6 +467,7 @@ void AddonsWindow::populateRecommendedCards() {
         target.url = addon.url;
         target.folders = addon.folders;
         target.source = "recommended";
+        target.sha256 = addon.sha256;
 
         QFrame* frame = makeCardFrame(m_recommendedLayout->parentWidget());
         QHBoxLayout* row = new QHBoxLayout(frame);
@@ -709,6 +744,7 @@ void AddonsWindow::startInstall(const InstallTarget& target, AddonCard* card) {
     request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                          QNetworkRequest::SameOriginRedirectPolicy);
     m_currentReply = m_networkManager->get(request);
+    ErraiNetwork::watch(m_currentReply);
     m_currentReply->setProperty("file", QVariant::fromValue(file));
 
     connect(m_currentReply, &QNetworkReply::downloadProgress, this, &AddonsWindow::onDownloadProgress);
@@ -752,6 +788,18 @@ void AddonsWindow::onDownloadFinished() {
     if (!isZipFile(m_activeZipPath)) {
         finishInstall(false, tr("Le fichier téléchargé n'est pas une archive ZIP valide."), m_activeCard);
         return;
+    }
+
+    // Fork Errai : empreinte publiée dans le manifeste (archives de quelques Mo).
+    if (m_activeCard && !m_activeCard->target.sha256.isEmpty()) {
+        QFile zip(m_activeZipPath);
+        QCryptographicHash hash(QCryptographicHash::Sha256);
+        if (!zip.open(QIODevice::ReadOnly) || !hash.addData(&zip)
+            || QString::fromLatin1(hash.result().toHex()) != m_activeCard->target.sha256) {
+            finishInstall(false, tr("L'archive de l'addon est corrompue (empreinte SHA-256 différente)."),
+                          m_activeCard);
+            return;
+        }
     }
 
     extractAndDeploy(m_activeZipPath, m_activeCard);

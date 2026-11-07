@@ -25,6 +25,11 @@ struct AddonInfo {
     QString description;
     QString downloadFileName;
     QString folderName;
+    // Fork Errai : renseignés quand l'entrée vient du manifeste.
+    QString url;            // vide = kAddonDownloadEndpoint + downloadFileName
+    QStringList folders;    // vide = { folderName }
+    QString sha256;
+    QString id;             // vide = folderName
 };
 
 class AddonsWindow : public QDialog {
@@ -44,6 +49,7 @@ private:
         QString url;         // full download URL
         QStringList folders; // folders expected under Interface/AddOns
         QString source;      // "recommended" | "catalog"
+        QString sha256;      // vide = non vérifiée
     };
 
     // Per-row widgets so a card can be refreshed after install/uninstall.
@@ -66,6 +72,7 @@ private:
     void setupUi();
     QWidget* buildRecommendedTab();
     QWidget* buildCatalogTab();
+    void populateCatalogCards();   // (re)construit les cartes du catalogue
     QWidget* buildInstalledTab();
     void populateCatalog();
     void populateRecommendedCards();

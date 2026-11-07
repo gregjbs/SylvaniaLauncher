@@ -1,4 +1,5 @@
 #include "AddonManifest.h"
+#include "ErraiNetwork.h"
 
 #include <QFile>
 #include <QJsonDocument>
@@ -23,7 +24,7 @@ AddonManifest::~AddonManifest() {
     }
 }
 
-std::vector<ManifestAddon> AddonManifest::parse(const QByteArray& json, bool* ok) {
+std::vector<ManifestAddon> AddonManifest::parse(const QByteArray& json, bool* ok, const QString& key) {
     if (ok) *ok = false;
     std::vector<ManifestAddon> result;
 
@@ -33,7 +34,7 @@ std::vector<ManifestAddon> AddonManifest::parse(const QByteArray& json, bool* ok
         return result;
     }
 
-    const QJsonArray array = doc.object().value("addons").toArray();
+    const QJsonArray array = doc.object().value(key).toArray();
     for (const QJsonValue& v : array) {
         const QJsonObject obj = v.toObject();
         ManifestAddon a;
@@ -42,6 +43,7 @@ std::vector<ManifestAddon> AddonManifest::parse(const QByteArray& json, bool* ok
         a.version = obj.value("version").toString();
         a.description = obj.value("description").toString();
         a.url = obj.value("url").toString();
+        a.sha256 = obj.value("sha256").toString().toLower();
         const QJsonArray folders = obj.value("folders").toArray();
         for (const QJsonValue& f : folders) {
             const QString folder = f.toString();
@@ -77,6 +79,7 @@ void AddonManifest::fetch() {
                          QNetworkRequest::SameOriginRedirectPolicy);
 
     m_reply = m_network->get(request);
+    ErraiNetwork::watch(m_reply);
     connect(m_reply, &QNetworkReply::finished, this, [this]() {
         QNetworkReply* reply = m_reply;
         m_reply = nullptr;
@@ -84,9 +87,11 @@ void AddonManifest::fetch() {
         bool fromRemote = false;
         if (reply && reply->error() == QNetworkReply::NoError) {
             bool ok = false;
-            std::vector<ManifestAddon> remote = parse(reply->readAll(), &ok);
+            const QByteArray data = reply->readAll();
+            std::vector<ManifestAddon> remote = parse(data, &ok);
             if (ok) {
                 m_addons = std::move(remote);
+                m_catalogue = parse(data, nullptr, QStringLiteral("catalogue"));
                 fromRemote = true;
             }
         }
@@ -94,6 +99,9 @@ void AddonManifest::fetch() {
 
         if (!fromRemote) {
             m_addons = embedded();
+            QFile file(m_embeddedResource);
+            if (file.open(QIODevice::ReadOnly))
+                m_catalogue = parse(file.readAll(), nullptr, QStringLiteral("catalogue"));
         }
         emit loaded(fromRemote);
     });

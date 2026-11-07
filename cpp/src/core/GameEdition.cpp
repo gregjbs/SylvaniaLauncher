@@ -19,7 +19,7 @@ const GameEdition& GameEdition::wotlk() {
         ed.archiveFormat = QStringLiteral("zip");
         ed.addonManifestUrl = QString::fromUtf8(SylvaniaConstants::kAddonManifestUrl);
         ed.embeddedManifestResource = QStringLiteral(":/addons/manifest");
-        ed.addonDownloadHost = QString::fromUtf8(SylvaniaConstants::kServerHost);
+        ed.addonDownloadHost = QString::fromUtf8(SylvaniaConstants::kErraiHost);
         ed.supportsHdPatch = true;
         ed.supportsEnUsPack = true;
         ed.logoAsset = QStringLiteral("sylvania_logo.png");

@@ -1,116 +1,583 @@
 {
-    "addons": [
-        {
-            "id": "elvui",
-            "name": "ElvUI",
-            "version": "6.08",
-            "description": "Une interface utilisateur complète, moderne et minimaliste.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=elvui.zip",
-            "folders": ["ElvUI", "ElvUI_AddOnSkins", "ElvUI_CustomTags", "ElvUI_Enhanced", "ElvUI_OptionsUI", "ElvUI_ProjectZidras", "ElvUI_SwingBar"]
-        },
-        {
-            "id": "bartender4",
-            "name": "Bartender4",
-            "version": "4.4.2",
-            "description": "Personnalisation totale de vos barres d'actions.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=Bartender4.zip",
-            "folders": ["Bartender4"]
-        },
-        {
-            "id": "dbm",
-            "name": "Deadly Boss Mods (DBM)",
-            "version": "",
-            "description": "Alertes et chronomètres indispensables pour les raids.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=DBM.zip",
-            "folders": ["DBM-ChamberOfAspects", "DBM-Coliseum", "DBM-Core", "DBM-EyeOfEternity", "DBM-GUI", "DBM-Icecrown", "DBM-Naxx", "DBM-Onyxia", "DBM-Party-WotLK", "DBM-PvP", "DBM-Ulduar", "DBM-VoA", "DBM-WorldEvents"]
-        },
-        {
-            "id": "details",
-            "name": "Details! Damage Meter",
-            "version": "",
-            "description": "Le compteur de combat le plus précis et détaillé.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=details.zip",
-            "folders": ["Details", "Details_3DModelsPaths", "Details_ChartViewer", "Details_DataStorage", "Details_DeathGraphs", "Details_EncounterDetails", "Details_SunderCount", "Details_TimeLine", "Details_TinyThreat"]
-        },
-        {
-            "id": "weakauras",
-            "name": "WeakAuras",
-            "version": "4.0.0",
-            "description": "L'outil ultime pour créer vos propres alertes visuelles.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=WeakAuras.zip",
-            "folders": ["WeakAuras", "WeakAurasArchive", "WeakAurasModelPaths", "WeakAurasOptions"]
-        },
-        {
-            "id": "atlasloot",
-            "name": "AtlasLoot",
-            "version": "5.11.04",
-            "description": "Base de données complète des butins de donjons et raids.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=AtlasLoot.zip",
-            "folders": ["AtlasLoot", "AtlasLootFu", "AtlasLoot_BurningCrusade", "AtlasLoot_Crafting", "AtlasLoot_OriginalWoW", "AtlasLoot_WorldEvents", "AtlasLoot_WrathoftheLichKing"]
-        },
-        {
-            "id": "gearscore",
-            "name": "GearScore",
-            "version": "3.1.20b",
-            "description": "Évalue le niveau d'équipement global des joueurs.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=GearScore.zip",
-            "folders": ["GearScore"]
-        },
-        {
-            "id": "auctionator",
-            "name": "Auctionator",
-            "version": "2.6.3",
-            "description": "Améliore l'interface de l'Hôtel des Ventes.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=Auctionator.zip",
-            "folders": ["Auctionator"]
-        },
-        {
-            "id": "bagnon",
-            "name": "Bagnon",
-            "version": "2.13.3",
-            "description": "Regroupe tous vos sacs en une seule fenêtre épurée.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=Bagnon.zip",
-            "folders": ["Bagnon", "Bagnon_Config", "Bagnon_Forever", "Bagnon_GuildBank", "Bagnon_Tooltips"]
-        },
-        {
-            "id": "questhelper",
-            "name": "QuestHelper",
-            "version": "1.4.1",
-            "description": "Le guide classique pour optimiser vos itinéraires de quêtes.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=QuestHelper.zip",
-            "folders": ["QuestHelper"]
-        },
-        {
-            "id": "tomtom",
-            "name": "TomTom",
-            "version": "",
-            "description": "Navigation par coordonnées GPS et flèche directionnelle.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=TomTom.zip",
-            "folders": ["TomTom"]
-        },
-        {
-            "id": "healbot",
-            "name": "HealBot Continued",
-            "version": "3.3.5.4",
-            "description": "Addon de soin par clic, incontournable pour les heals.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=HealBot_3.3.5.4.zip",
-            "folders": ["HealBot", "TitanHealBot"]
-        },
-        {
-            "id": "vuhdo",
-            "name": "VuhDo",
-            "version": "2.23",
-            "description": "Interface de raid et de soin extrêmement personnalisable.",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=vuhdo.zip",
-            "folders": ["VuhDo", "VuhDoOptions"]
-        },
-        {
-            "id": "consoleportlk",
-            "name": "ConsolePortLK",
-            "version": "1.5.0-rc",
-            "description": "Support manette / contrôleur complet pour WoW 3.3.5a (ConsolePort porté pour WotLK).",
-            "url": "https://sylvania-servergame.com/download_addon.php?file=ConsolePortLK-1.5.0-rc.zip",
-            "folders": ["ConsolePort", "ConsolePortAdvanced", "ConsolePortBar", "ConsolePortHelp", "ConsolePortKeyboard", "ConsolePortLoader", "ConsolePortUI_Loot", "ConsolePortUI_Menu"]
-        }
-    ]
+  "source": "Archives copiées de sylvania-servergame.com le 7 novembre 2026, plus MultiBot (github.com/Macx-Lio/MultiBot, commit ecee413)",
+  "addons": [
+    {
+      "id": "multibot",
+      "name": "MultiBot",
+      "version": "2.0.0",
+      "description": "Pilotez vos compagnons playerbots à la souris : recrutement, ordres, stratégies, équipement.",
+      "folders": [
+        "MultiBot"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/MultiBot.zip",
+      "taille": 31043677,
+      "sha256": "0b1df12958b87a089c9323441d8964834c6e41ad9116c6dd4f614c3ea8c174e9"
+    },
+    {
+      "id": "elvui",
+      "name": "ElvUI",
+      "version": "6.08",
+      "description": "Une interface utilisateur complète, moderne et minimaliste.",
+      "folders": [
+        "ElvUI",
+        "ElvUI_AddOnSkins",
+        "ElvUI_CustomTags",
+        "ElvUI_Enhanced",
+        "ElvUI_OptionsUI",
+        "ElvUI_ProjectZidras",
+        "ElvUI_SwingBar"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/elvui.zip",
+      "taille": 6187023,
+      "sha256": "f8877898b9a510a79c2405e726fce1a66a273640bbf1226e2857121b132f3e60"
+    },
+    {
+      "id": "bartender4",
+      "name": "Bartender4",
+      "version": "4.4.2",
+      "description": "Personnalisation totale de vos barres d'actions.",
+      "folders": [
+        "Bartender4"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Bartender4.zip",
+      "taille": 254790,
+      "sha256": "b56901863fc7c540bd7308b28fc225dcabf849a276e766f2baa3fbcd2e05895f"
+    },
+    {
+      "id": "dbm",
+      "name": "Deadly Boss Mods (DBM)",
+      "version": "",
+      "description": "Alertes et chronomètres indispensables pour les raids.",
+      "folders": [
+        "DBM-ChamberOfAspects",
+        "DBM-Coliseum",
+        "DBM-Core",
+        "DBM-EyeOfEternity",
+        "DBM-GUI",
+        "DBM-Icecrown",
+        "DBM-Naxx",
+        "DBM-Onyxia",
+        "DBM-Party-WotLK",
+        "DBM-PvP",
+        "DBM-Ulduar",
+        "DBM-VoA",
+        "DBM-WorldEvents"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/DBM.zip",
+      "taille": 1322876,
+      "sha256": "91f4b594742882455a767c944abb60df2f05c9f7024ed48666ef4f97e9a731d9"
+    },
+    {
+      "id": "details",
+      "name": "Details! Damage Meter",
+      "version": "",
+      "description": "Le compteur de combat le plus précis et détaillé.",
+      "folders": [
+        "Details",
+        "Details_3DModelsPaths",
+        "Details_ChartViewer",
+        "Details_DataStorage",
+        "Details_DeathGraphs",
+        "Details_EncounterDetails",
+        "Details_SunderCount",
+        "Details_TimeLine",
+        "Details_TinyThreat"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/details.zip",
+      "taille": 5417339,
+      "sha256": "bf2f63c9956e27407088940a82fe710fd8392c79cc69e55d0e937f97d054bc7a"
+    },
+    {
+      "id": "weakauras",
+      "name": "WeakAuras",
+      "version": "4.0.0",
+      "description": "L'outil ultime pour créer vos propres alertes visuelles.",
+      "folders": [
+        "WeakAuras",
+        "WeakAurasArchive",
+        "WeakAurasModelPaths",
+        "WeakAurasOptions"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/WeakAuras.zip",
+      "taille": 7277768,
+      "sha256": "423e6124b6e3ab574d0e14041c8d11e85794b440219d7b65c00ed57ed2a048a3"
+    },
+    {
+      "id": "atlasloot",
+      "name": "AtlasLoot",
+      "version": "5.11.04",
+      "description": "Base de données complète des butins de donjons et raids.",
+      "folders": [
+        "AtlasLoot",
+        "AtlasLootFu",
+        "AtlasLoot_BurningCrusade",
+        "AtlasLoot_Crafting",
+        "AtlasLoot_OriginalWoW",
+        "AtlasLoot_WorldEvents",
+        "AtlasLoot_WrathoftheLichKing"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/AtlasLoot.zip",
+      "taille": 1976377,
+      "sha256": "d08a47900105a841ac5e01b5aa32d104ec0ed49576f42d3039de12aadc02c174"
+    },
+    {
+      "id": "gearscore",
+      "name": "GearScore",
+      "version": "3.1.20b",
+      "description": "Évalue le niveau d'équipement global des joueurs.",
+      "folders": [
+        "GearScore"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/GearScore.zip",
+      "taille": 109798,
+      "sha256": "21238dc6b25e32e494d0fb15daddff781927cda1a63ebe93767af0157d16c987"
+    },
+    {
+      "id": "auctionator",
+      "name": "Auctionator",
+      "version": "2.6.3",
+      "description": "Améliore l'interface de l'Hôtel des Ventes.",
+      "folders": [
+        "Auctionator"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Auctionator.zip",
+      "taille": 228580,
+      "sha256": "00955ee976b97fb3c78cf40d3f1a26261d064e3ccd23572f2f97fe0126cd6c1f"
+    },
+    {
+      "id": "bagnon",
+      "name": "Bagnon",
+      "version": "2.13.3",
+      "description": "Regroupe tous vos sacs en une seule fenêtre épurée.",
+      "folders": [
+        "Bagnon",
+        "Bagnon_Config",
+        "Bagnon_Forever",
+        "Bagnon_GuildBank",
+        "Bagnon_Tooltips"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Bagnon.zip",
+      "taille": 114201,
+      "sha256": "254f7628052b61abb7ed25f36179a4f65e1a748be6d092fc3761e1e7da2d3320"
+    },
+    {
+      "id": "questhelper",
+      "name": "QuestHelper",
+      "version": "1.4.1",
+      "description": "Le guide classique pour optimiser vos itinéraires de quêtes.",
+      "folders": [
+        "QuestHelper"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/QuestHelper.zip",
+      "taille": 5921205,
+      "sha256": "4763bed008aff0daf9f6f5a26aafdbe4d1db61a5b38926f9bc8fc12a68536583"
+    },
+    {
+      "id": "tomtom",
+      "name": "TomTom",
+      "version": "",
+      "description": "Navigation par coordonnées GPS et flèche directionnelle.",
+      "folders": [
+        "TomTom"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/TomTom.zip",
+      "taille": 372699,
+      "sha256": "237f8bd4c59d8f06fdc15d910cbe535c2ff1cd61fb14d1a07d4dc91856276d5e"
+    },
+    {
+      "id": "healbot",
+      "name": "HealBot Continued",
+      "version": "3.3.5.4",
+      "description": "Addon de soin par clic, incontournable pour les heals.",
+      "folders": [
+        "HealBot",
+        "TitanHealBot"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/HealBot_3.3.5.4.zip",
+      "taille": 1850519,
+      "sha256": "0d5b04388f095358e612d3f68aa5834fb61e685ee1fa0d066b809babf7680102"
+    },
+    {
+      "id": "vuhdo",
+      "name": "VuhDo",
+      "version": "2.23",
+      "description": "Interface de raid et de soin extrêmement personnalisable.",
+      "folders": [
+        "VuhDo",
+        "VuhDoOptions"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/vuhdo.zip",
+      "taille": 1028016,
+      "sha256": "7a28d72993eafadc1541af66a28e6ea8c7e3ae67caedb0015c986cf53e452413"
+    },
+    {
+      "id": "consoleportlk",
+      "name": "ConsolePortLK",
+      "version": "1.5.0-rc",
+      "description": "Support manette / contrôleur complet pour WoW 3.3.5a (ConsolePort porté pour WotLK).",
+      "folders": [
+        "ConsolePort",
+        "ConsolePortAdvanced",
+        "ConsolePortBar",
+        "ConsolePortHelp",
+        "ConsolePortKeyboard",
+        "ConsolePortLoader",
+        "ConsolePortUI_Loot",
+        "ConsolePortUI_Menu"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/ConsolePortLK-1.5.0-rc.zip",
+      "taille": 10743022,
+      "sha256": "15de74bb07e4145c684186486fc3c09ba0cf1dca7ee348c8a99be284c17ed406"
+    }
+  ],
+  "catalogue": [
+    {
+      "id": "ArkInventory",
+      "name": "ArkInventory",
+      "version": "",
+      "description": "Gestion d'inventaire avancée avec catégories automatiques.",
+      "folders": [
+        "ArkInventory"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/ArkInventory.zip",
+      "taille": 805292,
+      "sha256": "721a565347780c5c8af6d498a3d98670953461c23586dce1fff9631a06febf83"
+    },
+    {
+      "id": "AtlasLoot",
+      "name": "AtlasLoot",
+      "version": "",
+      "description": "Base de données complète des butins de donjons et raids.",
+      "folders": [
+        "AtlasLoot"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/AtlasLoot.zip",
+      "taille": 1976377,
+      "sha256": "d08a47900105a841ac5e01b5aa32d104ec0ed49576f42d3039de12aadc02c174"
+    },
+    {
+      "id": "Auctionator",
+      "name": "Auctionator",
+      "version": "",
+      "description": "Améliore l'interface de l'Hôtel des Ventes.",
+      "folders": [
+        "Auctionator"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Auctionator.zip",
+      "taille": 228580,
+      "sha256": "00955ee976b97fb3c78cf40d3f1a26261d064e3ccd23572f2f97fe0126cd6c1f"
+    },
+    {
+      "id": "Bagnon",
+      "name": "Bagnon",
+      "version": "",
+      "description": "Regroupe tous vos sacs en une seule fenêtre épurée.",
+      "folders": [
+        "Bagnon"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Bagnon.zip",
+      "taille": 114201,
+      "sha256": "254f7628052b61abb7ed25f36179a4f65e1a748be6d092fc3761e1e7da2d3320"
+    },
+    {
+      "id": "Bartender4",
+      "name": "Bartender4",
+      "version": "",
+      "description": "Personnalisation totale de vos barres d'actions.",
+      "folders": [
+        "Bartender4"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Bartender4.zip",
+      "taille": 254790,
+      "sha256": "b56901863fc7c540bd7308b28fc225dcabf849a276e766f2baa3fbcd2e05895f"
+    },
+    {
+      "id": "DBM-Core",
+      "name": "Deadly Boss Mods (DBM)",
+      "version": "",
+      "description": "Alertes et chronomètres indispensables pour les raids.",
+      "folders": [
+        "DBM-Core"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/DBM.zip",
+      "taille": 1322876,
+      "sha256": "91f4b594742882455a767c944abb60df2f05c9f7024ed48666ef4f97e9a731d9"
+    },
+    {
+      "id": "GatherMate2",
+      "name": "GatherMate2",
+      "version": "",
+      "description": "Mémorise l'emplacement des plantes et minerais sur la carte.",
+      "folders": [
+        "GatherMate2"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/GatherMate2.zip",
+      "taille": 657168,
+      "sha256": "746a207d8e8d4685bdf673dbb7233a52566e8e0f4a3bc19461c174ab4353ffd2"
+    },
+    {
+      "id": "GearScore",
+      "name": "GearScore",
+      "version": "",
+      "description": "Évalue le niveau d'équipement global des joueurs.",
+      "folders": [
+        "GearScore"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/GearScore.zip",
+      "taille": 109798,
+      "sha256": "21238dc6b25e32e494d0fb15daddff781927cda1a63ebe93767af0157d16c987"
+    },
+    {
+      "id": "HandyNotes",
+      "name": "HandyNotes",
+      "version": "",
+      "description": "Ajoute des notes personnalisées et des points d'intérêt.",
+      "folders": [
+        "HandyNotes"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/HandyNotes.zip",
+      "taille": 174907,
+      "sha256": "a84a21b35e0a35d1b0f3be2a593b3682f238c400fcfba1ca34a9f93943eb1094"
+    },
+    {
+      "id": "Healium",
+      "name": "Healium",
+      "version": "",
+      "description": "Interface de soin avec boutons d'accès rapide aux sorts.",
+      "folders": [
+        "Healium"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Healium.zip",
+      "taille": 38306,
+      "sha256": "a4df73592f88b7789fc4c8cb34dc529528c3063889a2c7e10e684d3127813023"
+    },
+    {
+      "id": "Immersion",
+      "name": "Immersion",
+      "version": "",
+      "description": "Modernise l'affichage des textes de quêtes et dialogues.",
+      "folders": [
+        "Immersion"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Immersion.zip",
+      "taille": 1117124,
+      "sha256": "bdb13dda81b5eb4f2b973297b4dd1daa7ea8a72ff67f7d7b4d8b49ef52c8fe2a"
+    },
+    {
+      "id": "Mapster",
+      "name": "Mapster",
+      "version": "",
+      "description": "Améliore la visibilité et les fonctions de la carte du monde.",
+      "folders": [
+        "Mapster"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Mapster.zip",
+      "taille": 210431,
+      "sha256": "cd9afbd8a7b7e61c5ea73d5ee964cb14232f0cd7fe9366936a3b5faaf5d39062"
+    },
+    {
+      "id": "_NPCScan",
+      "name": "NPCScan",
+      "version": "",
+      "description": "Détecte les créatures rares à proximité et vous alerte avec un signal sonore.",
+      "folders": [
+        "_NPCScan"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/NPCScan.zip",
+      "taille": 51385,
+      "sha256": "23ae77872845d2e20b043363d465ea00eb6c6152cb514de2007323b3ae2a8ef3"
+    },
+    {
+      "id": "_NPCScan-Overlay",
+      "name": "NPCScan-Overlay",
+      "version": "",
+      "description": "Affiche les trajets et zones d'apparition des créatures rares sur la carte.",
+      "folders": [
+        "_NPCScan-Overlay"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/NPCScan-Overlay.zip",
+      "taille": 54980,
+      "sha256": "667707763e6e0342521a7969077b0e617ade04c8217538ace4d074ee7076e279"
+    },
+    {
+      "id": "Postal",
+      "name": "Postal",
+      "version": "",
+      "description": "Améliore radicalement la gestion de la boîte aux lettres.",
+      "folders": [
+        "Postal"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Postal.zip",
+      "taille": 66638,
+      "sha256": "176493f2c3c1a4f9eba88199ff8bbe5849b0bf3447ce5759d445cee9be507b4c"
+    },
+    {
+      "id": "Prat-3.0",
+      "name": "Prat",
+      "version": "",
+      "description": "Personnalisation poussée de la fenêtre de discussion.",
+      "folders": [
+        "Prat-3.0"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Prat-3.0.zip",
+      "taille": 780087,
+      "sha256": "aee2082a6ce9b131b0efcf59bca4a5622b44975f37813998e6b562c2895e542b"
+    },
+    {
+      "id": "Quartz",
+      "name": "Quartz",
+      "version": "",
+      "description": "Barres d'incantation modulaires et ultra-précises.",
+      "folders": [
+        "Quartz"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Quartz.zip",
+      "taille": 186872,
+      "sha256": "9edad3febb2485cd7eaa124395a38e2e8da13b71544e9698a51e25d7dde520a4"
+    },
+    {
+      "id": "QuestHelper",
+      "name": "QuestHelper",
+      "version": "",
+      "description": "Le guide classique pour optimiser vos itinéraires de quêtes.",
+      "folders": [
+        "QuestHelper"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/QuestHelper.zip",
+      "taille": 5921205,
+      "sha256": "4763bed008aff0daf9f6f5a26aafdbe4d1db61a5b38926f9bc8fc12a68536583"
+    },
+    {
+      "id": "Scrap",
+      "name": "Scrap",
+      "version": "",
+      "description": "Vente et réparation automatique chez les marchands.",
+      "folders": [
+        "Scrap"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/Scrap.zip",
+      "taille": 143876,
+      "sha256": "6255fd518d4134d1f5a8497fa0d44ca75bca4798ddc3769478638f87b9bcc8c1"
+    },
+    {
+      "id": "SexyMap",
+      "name": "SexyMap",
+      "version": "",
+      "description": "Donne un look moderne et personnalisable à votre mini-carte.",
+      "folders": [
+        "SexyMap"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/SexyMap.zip",
+      "taille": 197942,
+      "sha256": "622a553ecb83d660df234d533eae2cb01c3a0c26b03198a515ba6ebbed1bebe8"
+    },
+    {
+      "id": "TomTom",
+      "name": "TomTom",
+      "version": "",
+      "description": "Navigation par coordonnées GPS et flèche directionnelle.",
+      "folders": [
+        "TomTom"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/TomTom.zip",
+      "taille": 372699,
+      "sha256": "237f8bd4c59d8f06fdc15d910cbe535c2ff1cd61fb14d1a07d4dc91856276d5e"
+    },
+    {
+      "id": "WIM",
+      "name": "WIM",
+      "version": "",
+      "description": "Gère vos chuchotements dans des fenêtres séparées.",
+      "folders": [
+        "WIM"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/WIM.zip",
+      "taille": 756038,
+      "sha256": "74223f40403513a81536d1a465a7d29c9d8841b6034d038aa5fea58d4fb8bfee"
+    },
+    {
+      "id": "WeakAuras2",
+      "name": "WeakAuras",
+      "version": "",
+      "description": "L'outil ultime pour créer vos propres alertes visuelles.",
+      "folders": [
+        "WeakAuras2"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/WeakAuras.zip",
+      "taille": 7277768,
+      "sha256": "423e6124b6e3ab574d0e14041c8d11e85794b440219d7b65c00ed57ed2a048a3"
+    },
+    {
+      "id": "XPerl",
+      "name": "XPerl",
+      "version": "",
+      "description": "Refonte visuelle des portraits de joueurs (Style Classique).",
+      "folders": [
+        "XPerl"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/XPerl.zip",
+      "taille": 710765,
+      "sha256": "03141f14ee08a51acaaa5ca75f7701d3a5ae8ee427c5ada70cf3afc33762fb3f"
+    },
+    {
+      "id": "Details",
+      "name": "Details!",
+      "version": "",
+      "description": "Le compteur de combat le plus précis et détaillé.",
+      "folders": [
+        "Details"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/details.zip",
+      "taille": 5417339,
+      "sha256": "bf2f63c9956e27407088940a82fe710fd8392c79cc69e55d0e937f97d054bc7a"
+    },
+    {
+      "id": "ElvUI",
+      "name": "ElvUI",
+      "version": "",
+      "description": "Une interface utilisateur complète, moderne et minimaliste.",
+      "folders": [
+        "ElvUI"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/elvui.zip",
+      "taille": 6187023,
+      "sha256": "f8877898b9a510a79c2405e726fce1a66a273640bbf1226e2857121b132f3e60"
+    },
+    {
+      "id": "ShadowedUnitFrames",
+      "name": "Shadowed Unit Frames",
+      "version": "",
+      "description": "Portraits de joueurs épurés et hautement configurables.",
+      "folders": [
+        "ShadowedUnitFrames"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/shadowedunitframes.zip",
+      "taille": 496383,
+      "sha256": "93080608efcb4fc0150c9d540776cfe1363c45025a145628394a3e6a1789dcca"
+    },
+    {
+      "id": "TotalRP3",
+      "name": "TotalRP3",
+      "version": "",
+      "description": "L'addon de référence pour l'immersion et le jeu de rôle.",
+      "folders": [
+        "TotalRP3"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/totalRP3.zip",
+      "taille": 1677053,
+      "sha256": "db320ef2320fed0dc0eda30b6da0f7cc1d33bc58b6076d2553a9e00367102a8c"
+    },
+    {
+      "id": "VuhDo",
+      "name": "VuhDo",
+      "version": "",
+      "description": "Interface de raid et de soin extrêmement personnalisable.",
+      "folders": [
+        "VuhDo"
+      ],
+      "url": "https://errai.minotux.com/telechargements/addons/vuhdo.zip",
+      "taille": 1028016,
+      "sha256": "7a28d72993eafadc1541af66a28e6ea8c7e3ae67caedb0015c986cf53e452413"
+    }
+  ]
 }
