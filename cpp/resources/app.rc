@@ -12,13 +12,13 @@ BEGIN
     BEGIN
         BLOCK "040904B0"
         BEGIN
-            VALUE "CompanyName",      "Sylvania"
-            VALUE "FileDescription",  "Sylvania Launcher - World of Warcraft (WotLK 3.3.5 / Legion 7.3.5)"
+            VALUE "CompanyName",      "Errai"
+            VALUE "FileDescription",  "WowErraiLauncher - World of Warcraft 3.3.5a (Errai)"
             VALUE "FileVersion",      "3.0.0.0"
-            VALUE "InternalName",     "SylvaniaLauncher"
-            VALUE "LegalCopyright",   "Copyright (C) 2026 Sylvania - GPLv3"
-            VALUE "OriginalFilename", "SylvaniaLauncher.exe"
-            VALUE "ProductName",      "Sylvania Launcher"
+            VALUE "InternalName",     "WowErraiLauncher"
+            VALUE "LegalCopyright",   "Copyright (C) 2026 Sylvania, fork Errai - GPLv3"
+            VALUE "OriginalFilename", "WowErraiLauncher.exe"
+            VALUE "ProductName",      "WowErraiLauncher"
             VALUE "ProductVersion",   "3.0.0.0"
         END
     END

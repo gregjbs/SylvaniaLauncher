@@ -69,7 +69,7 @@ QString DownloadDialog::archivePath() const {
     const QString suffix = (m_archiveFormat == QLatin1String("tar.gz"))
                                ? QStringLiteral(".tar.gz")
                                : QStringLiteral(".zip");
-    return m_destination + "/SylvaniaClient_" + m_editionId + "_temp" + suffix;
+    return m_destination + "/ErraiClient_" + m_editionId + "_temp" + suffix;
 }
 
 void DownloadDialog::setupUi() {
@@ -962,7 +962,7 @@ void DownloadDialog::generateConfigWtf() {
         out << "SET ffxSpecial \"0\"\n";
         out << "SET groundEffectDensity \"64\"\n";
         out << "SET realmList \"" << host << "\"\n";
-        out << "SET realmName \"The Kingdom of Sylvania\"\n";
+        out << "SET realmName \"Errai\"\n";
         out << "SET specular \"1\"\n";
         out << "SET Sound_MasterVolume \"0.60000002384186\"\n";
         out << "SET Sound_ZoneMusicNoDelay \"1\"\n";

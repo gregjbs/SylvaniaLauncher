@@ -120,7 +120,7 @@ MainWindow::MainWindow(QWidget* parent)
     // Tray icon: hosts reminder toasts and restores the window on click.
     // Created before applyEdition() so the edition icon lands on it too.
     m_trayIcon = new QSystemTrayIcon(this);
-    m_trayIcon->setToolTip(QStringLiteral("Sylvania Launcher"));
+    m_trayIcon->setToolTip(QStringLiteral("WowErraiLauncher"));
     connect(m_trayIcon, &QSystemTrayIcon::activated, this,
             [this](QSystemTrayIcon::ActivationReason reason) {
         if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick) {
@@ -759,7 +759,7 @@ void MainWindow::refreshPrimaryState() {
     auto entries = m_config->getRealmlistEntries();
     int activeIndex = m_config->getActiveRealmlistIndex();
     QString serverName = (activeIndex >= 0 && activeIndex < static_cast<int>(entries.size()))
-        ? entries[activeIndex].name : "Sylvania";
+        ? entries[activeIndex].name : "Errai";
 
     m_statusLabel->setText(tr("%1 est installé. Prêt à jouer sur %2!")
                                .arg(edition.displayName, serverName));
@@ -1275,7 +1275,7 @@ void MainWindow::retranslateUi() {
     // Note: m_serverNameLabel is updated via updateServerInfo below
 
     if (m_footerLabel) {
-        m_footerLabel->setText(tr("© 2026 Sylvania Launcher v3.0 — %1").arg(edition.displayName));
+        m_footerLabel->setText(tr("WowErraiLauncher v3.0, d'après Sylvania Launcher — %1").arg(edition.displayName));
     }
 
     refreshPrimaryState();

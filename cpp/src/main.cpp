@@ -1,6 +1,7 @@
 /**
  * @file main.cpp
- * @brief Sylvania Launcher - World of Warcraft launcher (WotLK 3.3.5a + Legion 7.3.5)
+ * @brief WowErraiLauncher - launcher World of Warcraft 3.3.5a du royaume Errai
+ *        (fork GPLv3 de Sylvania Launcher : WotLK 3.3.5a + Legion 7.3.5)
  *
  * Main entry point for the C++ version of Sylvania Launcher.
  */
@@ -98,17 +99,19 @@ int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
     // Set application metadata
-    app.setApplicationName("Sylvania Launcher");
+    // Fork Errai : le nom d'application fixe le dossier de configuration,
+    // %LOCALAPPDATA%\WowErraiLauncher (sans nom d'organisation, volontairement :
+    // Qt l'insérerait dans le chemin). Distinct de celui du launcher Sylvania.
+    app.setApplicationName("WowErraiLauncher");
     app.setApplicationVersion("3.0");
-    app.setOrganizationName("Sylvania");
-    app.setOrganizationDomain("sylvania-servergame.com");
+    app.setOrganizationDomain("errai.minotux.com");
 
 #ifdef Q_OS_WIN
     // Windows: single edition-neutral AppUserModelID for taskbar grouping.
     // The launcher hosts both WotLK and Legion, so the id is no longer tied
     // to 3.3.5; the visible taskbar icon follows the active edition's window
     // icon instead.
-    SetCurrentProcessExplicitAppUserModelID(L"sylvania.launcher");
+    SetCurrentProcessExplicitAppUserModelID(L"errai.wowerrailauncher");
 #endif
 
     // Headless self-tests (developer use; no UI).

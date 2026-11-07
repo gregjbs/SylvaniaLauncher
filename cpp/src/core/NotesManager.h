@@ -61,7 +61,7 @@ struct NotesStats {
 /**
  * @brief Notes manager for local JSON-based note storage
  * 
- * Handles CRUD operations for notes stored in %LOCALAPPDATA%/SylvaniaLauncher/data/
+ * Handles CRUD operations for notes stored in %LOCALAPPDATA%/WowErraiLauncher/data/
  */
 class NotesManager : public QObject {
     Q_OBJECT

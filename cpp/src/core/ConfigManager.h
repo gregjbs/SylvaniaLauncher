@@ -22,7 +22,7 @@ struct RealmlistEntry {
  * @brief Configuration manager for Sylvania Launcher
  *
  * Handles reading/writing configuration settings to JSON file
- * stored in %LOCALAPPDATA%/SylvaniaLauncher/config.json
+ * stored in %LOCALAPPDATA%/WowErraiLauncher/config.json
  *
  * v3.0: the config is edition-aware. Global settings (language, sound,
  * background, window geometry) stay top-level; everything client-related

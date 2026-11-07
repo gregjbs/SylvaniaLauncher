@@ -9,7 +9,7 @@ namespace PathUtils {
 
 /**
  * @brief Get the application data directory
- * @return Path to %LOCALAPPDATA%/SylvaniaLauncher
+ * @return Path to %LOCALAPPDATA%/WowErraiLauncher
  */
 inline QString getAppDataDir() {
     QString appData = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);

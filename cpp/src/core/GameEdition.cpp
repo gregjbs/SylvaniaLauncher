@@ -6,7 +6,7 @@ const GameEdition& GameEdition::wotlk() {
         GameEdition ed;
         ed.id = QStringLiteral("wotlk");
         ed.displayName = QStringLiteral("WoW 3.3.5a");
-        ed.windowTitle = QStringLiteral("Sylvania Launcher - World of Warcraft 3.3.5");
+        ed.windowTitle = QStringLiteral("WowErraiLauncher - World of Warcraft 3.3.5");
         ed.clientExeCandidates = {QStringLiteral("Wow.exe")};
         ed.defaultRealmName = QString::fromUtf8(SylvaniaConstants::kErraiRealmName);
         ed.defaultRealmlist = QString::fromUtf8(SylvaniaConstants::kErraiRealmlist);
@@ -45,7 +45,7 @@ const GameEdition& GameEdition::legion() {
         GameEdition ed;
         ed.id = QStringLiteral("legion");
         ed.displayName = QStringLiteral("WoW Legion 7.3.5");
-        ed.windowTitle = QStringLiteral("Sylvania Launcher - World of Warcraft Legion 7.3.5");
+        ed.windowTitle = QStringLiteral("WowErraiLauncher - World of Warcraft Legion 7.3.5");
         // The Sylvania Legion client ships a patched 64-bit launcher. It is
         // probed first so a vanilla Wow.exe (if also present) is never launched
         // by mistake; the others are fallbacks. Detection/launch is

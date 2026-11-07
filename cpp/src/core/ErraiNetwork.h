@@ -12,7 +12,7 @@ class QNetworkReply;
 // 1. Certificat : le serveur Errai présente un certificat auto-signé. Si l'option
 //    « ignorer le certificat d'Errai » est active (Réglages, activée par défaut),
 //    les erreurs TLS sont ignorées pour cet hôte UNIQUEMENT ; tout autre hôte
-//    (Sylvania pour les add-ons…) reste vérifié normalement.
+//    reste vérifié normalement.
 //
 // 2. Manifeste : client.json, à côté des archives, donne pour chacune son adresse,
 //    sa taille et son SHA-256. Avec la taille, le client se télécharge par morceaux

@@ -214,7 +214,7 @@ QWidget* AddonsWindow::buildRecommendedTab() {
     outer->setContentsMargins(12, 12, 12, 12);
     outer->setSpacing(8);
 
-    QLabel* info = new QLabel(tr("Installez en un clic des addons recommandés par Sylvania."), page);
+    QLabel* info = new QLabel(tr("Installez en un clic des addons recommandés pour Errai."), page);
     info->setWordWrap(true);
     info->setAlignment(Qt::AlignCenter);
     info->setStyleSheet("color: #aaaaaa; font-size: 12px;");
@@ -716,7 +716,7 @@ void AddonsWindow::startInstall(const InstallTarget& target, AddonCard* card) {
     if (safeId.isEmpty()) safeId = "addon";
 
     m_activeTempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation)
-                      + "/SylvaniaLauncher_Addons/" + safeId;
+                      + "/WowErraiLauncher_Addons/" + safeId;
     QDir().mkpath(m_activeTempDir);
     m_activeZipPath = m_activeTempDir + "/" + safeId + ".zip";
 

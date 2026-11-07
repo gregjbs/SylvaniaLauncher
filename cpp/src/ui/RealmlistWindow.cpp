@@ -14,7 +14,7 @@ RealmlistWindow::RealmlistWindow(ConfigManager* config, QWidget* parent)
     , m_config(config)
     , m_buttonGroup(new QButtonGroup(this))
 {
-    setWindowTitle(tr("🌐 Gestion des Serveurs - Sylvania Launcher"));
+    setWindowTitle(tr("🌐 Gestion des Serveurs - WowErraiLauncher"));
     setMinimumSize(500, 400);
     resize(600, 500);
     
@@ -336,7 +336,7 @@ void ServerEditDialog::setupUi(const QString& name, const QString& address, bool
     // Name
     layout->addWidget(new QLabel(tr("Nom du serveur:"), this));
     m_nameEdit = new QLineEdit(name, this);
-    m_nameEdit->setPlaceholderText(tr("Ex: Sylvania"));
+    m_nameEdit->setPlaceholderText(tr("Ex: Errai"));
     layout->addWidget(m_nameEdit);
 
     // Address — label + hint depend on the edition. Legion 7.3.5 uses a

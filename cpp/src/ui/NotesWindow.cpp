@@ -18,7 +18,7 @@ NotesWindow::NotesWindow(NotesManager* notesManager, QWidget* parent)
     : QDialog(parent)
     , m_notesManager(notesManager)
 {
-    setWindowTitle(tr("📝 Notes - Sylvania Launcher"));
+    setWindowTitle(tr("📝 Notes - WowErraiLauncher"));
     setMinimumSize(1000, 620);
     resize(1100, 680);
 

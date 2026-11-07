@@ -24,7 +24,7 @@ struct InstalledAddon {
  * @brief Registry of addons installed *by the launcher*.
  *
  * Persisted as installed_addons.json in the launcher config directory
- * (%LOCALAPPDATA%/SylvaniaLauncher), mirroring the existing config.json /
+ * (%LOCALAPPDATA%/WowErraiLauncher), mirroring the existing config.json /
  * stats.json convention rather than QSettings, because each record carries a
  * structured list of folders. The registry is what makes clean multi-folder
  * uninstallation (§3) and update detection (§5) possible.
