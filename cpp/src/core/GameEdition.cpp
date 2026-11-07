@@ -8,8 +8,8 @@ const GameEdition& GameEdition::wotlk() {
         ed.displayName = QStringLiteral("WoW 3.3.5a");
         ed.windowTitle = QStringLiteral("Sylvania Launcher - World of Warcraft 3.3.5");
         ed.clientExeCandidates = {QStringLiteral("Wow.exe")};
-        ed.defaultRealmName = QStringLiteral("Sylvania");
-        ed.defaultRealmlist = QStringLiteral("set realmlist sylvania-servergame.com");
+        ed.defaultRealmName = QString::fromUtf8(SylvaniaConstants::kErraiRealmName);
+        ed.defaultRealmlist = QString::fromUtf8(SylvaniaConstants::kErraiRealmlist);
         ed.clientDownloadUrl = QString::fromUtf8(SylvaniaConstants::kWotlkClientUrl);
         ed.clientExpectedSize = SylvaniaConstants::kWotlkClientExpectedSize;
         ed.clientExpectedSha256 = QString::fromUtf8(SylvaniaConstants::kWotlkClientSha256);

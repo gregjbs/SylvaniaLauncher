@@ -111,6 +111,11 @@ private:
     // known; rewrite any Legion entry still carrying it to the canonical
     // portal. Legion-scoped and idempotent. Returns true if anything changed.
     bool migrateLegionPortal();
+    // Fork Errai : sur une installation existante, ajoute le serveur Errai en
+    // tête de la liste WotLK (s'il n'y est pas) et le sélectionne. Une seule
+    // fois (clé errai_default_applied) : un choix ultérieur du joueur est
+    // respecté. Returns true if anything changed.
+    bool migrateErraiDefault();
     QString getConfigPath() const;
 
     // Per-edition sub-object helpers.

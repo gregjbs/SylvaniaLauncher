@@ -40,6 +40,12 @@ ConfigManager::ConfigManager(QObject* parent)
         dirty = true;
     }
 
+    // Fork Errai: make Errai the selected server once. The realmlist.wtf is
+    // rewritten from the active entry at every game launch.
+    if (migrateErraiDefault()) {
+        dirty = true;
+    }
+
     if (dirty) {
         save();
     }
@@ -209,6 +215,45 @@ bool ConfigManager::migrateLegionPortal() {
         m_config["editions"] = editions;
     }
     return changed;
+}
+
+bool ConfigManager::migrateErraiDefault() {
+    if (m_config.value("errai_default_applied").toBool()) return false;
+
+    const QString name = QString::fromUtf8(SylvaniaConstants::kErraiRealmName);
+    const QString address = QString::fromUtf8(SylvaniaConstants::kErraiRealmlist);
+    const QString host = QString::fromUtf8(SylvaniaConstants::kErraiHost);
+
+    QJsonObject editions = m_config.value("editions").toObject();
+    QJsonObject wotlk = editions.value("wotlk").toObject();
+    QJsonArray entries = wotlk.value("realmlist_entries").toArray();
+
+    // Reuse an existing Errai entry (the player may have added it by hand).
+    int index = -1;
+    for (int i = 0; i < entries.size(); ++i) {
+        if (hostFromAddress(entries[i].toObject().value("address").toString())
+                .compare(host, Qt::CaseInsensitive) == 0) {
+            index = i;
+            break;
+        }
+    }
+    if (index < 0) {
+        entries.prepend(QJsonObject{{"name", name}, {"address", address}, {"active", true}});
+        index = 0;
+    }
+    for (int i = 0; i < entries.size(); ++i) {
+        QJsonObject e = entries[i].toObject();
+        e["active"] = (i == index);
+        entries[i] = e;
+    }
+
+    wotlk["realmlist_entries"] = entries;
+    wotlk["active_realmlist_index"] = index;
+    editions["wotlk"] = wotlk;
+    m_config["editions"] = editions;
+    m_config["errai_default_applied"] = true;
+    qWarning() << "Serveur Errai sélectionné par défaut (entrée" << index << ")";
+    return true;
 }
 
 ConfigManager::~ConfigManager() {

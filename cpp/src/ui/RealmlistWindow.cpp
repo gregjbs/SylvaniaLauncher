@@ -347,7 +347,7 @@ void ServerEditDialog::setupUi(const QString& name, const QString& address, bool
     m_addressEdit = new QLineEdit(address, this);
     m_addressEdit->setPlaceholderText(
         legionPortal ? tr("Ex: 164.132.43.2")
-                     : tr("Ex: set realmlist sylvania-servergame.com"));
+                     : tr("Ex: set realmlist errai.minotux.com"));
     layout->addWidget(m_addressEdit);
     
     layout->addStretch();

@@ -1387,8 +1387,8 @@ Do you want to reinstall it or force an update anyway?</translation>
     </message>
     <message>
       <location filename="../../src/ui/RealmlistWindow.cpp" line="350" />
-      <source>Ex: set realmlist sylvania-servergame.com</source>
-      <translation>Ex: set realmlist sylvania-servergame.com</translation>
+      <source>Ex: set realmlist errai.minotux.com</source>
+      <translation>Ex: set realmlist errai.minotux.com</translation>
     </message>
     <message>
       <location filename="../../src/ui/RealmlistWindow.cpp" line="358" />

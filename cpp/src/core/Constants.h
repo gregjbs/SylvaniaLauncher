@@ -53,6 +53,14 @@ constexpr double kClientDiskSpaceFactor = 2.5;
 constexpr long long kDownloadSegmentBytes = 32LL * 1024 * 1024;  // 32 MiB
 constexpr int kDownloadSegmentRetries = 5;     // consecutive no-progress retries
 
+// --- Errai -----------------------------------------------------------------
+// Serveur par défaut de cette version du launcher (fork Errai). Nouvelle
+// installation : seule entrée de la liste. Installation existante : ajouté en
+// tête et sélectionné une fois (ConfigManager::migrateErraiDefault).
+inline constexpr const char* kErraiRealmName = "Errai";
+inline constexpr const char* kErraiHost = "errai.minotux.com";
+inline constexpr const char* kErraiRealmlist = "set realmlist errai.minotux.com";
+
 // --- Network ------------------------------------------------------------
 inline constexpr const char* kServerHost = "sylvania-servergame.com";
 inline constexpr const char* kHdPatchUrl =
